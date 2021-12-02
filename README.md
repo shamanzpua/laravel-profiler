@@ -1,7 +1,7 @@
 Install
 Add Service Provider to Laravel project:
 ```php
-shamanzpua\LaravelProfiler\ProfilerServiceProvider::class
+    shamanzpua\LaravelProfiler\ProfilerServiceProvider::class
 ```
 
 Usage
@@ -20,16 +20,15 @@ Usage
 .env configs
 
 ```shell
-  PROFILER_AUTH_CODE
-  PROFILER_LOG_STORAGE
-  PROFILER_QUERY_LOG_DBS
-  PROFILER_LOCAL_TIMEZONE
+    PROFILER_AUTH_CODE #secure package routes
+    PROFILER_QUERY_LOG_DBS #comma separated db connections (Illuminate\Database\Connection). Example: mysql,mongo,mysql2
+    PROFILER_LOCAL_TIMEZONE #timezone shown logs. If not set default timezone - utc
 
-  PROFILER_DB_CRITICAL_DURATION
-  PROFILER_DB_WARNING_DURATION
-  PROFILER_CODE_WARNING_DURATION
-  PROFILER_CODE_CRITICAL_DURATION
+    PROFILER_DB_CRITICAL_DURATION
+    PROFILER_DB_WARNING_DURATION
+    PROFILER_CODE_WARNING_DURATION
+    PROFILER_CODE_CRITICAL_DURATION
 
-  PROFILER_STORAGE
-  PROFILER_FILE_STORAGE_PATH
+    PROFILER_STORAGE     #default file
+    PROFILER_FILE_STORAGE_PATH 
 ```

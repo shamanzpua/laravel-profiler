@@ -3,7 +3,6 @@ use shamanzpua\LaravelProfiler\LogStorages\LaravelFileLogStorage;
 
 return [
     'auth_code' => env('PROFILER_AUTH_CODE', null),
-    'profile_log_storage' => env('PROFILER_LOG_STORAGE', 'file'),
     'db_connections' => env('PROFILER_QUERY_LOG_DBS'),
     'timezone' => env('PROFILER_LOCAL_TIMEZONE'),
     'durations' => [
