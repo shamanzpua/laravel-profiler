@@ -16,7 +16,6 @@ class DBQueriesProfiler implements ICustomProfiler
 
     public function init()
     {
-
         $connections = config('code-profiler.db_connections');
 
         if (!$connections || $connections == '') {
@@ -40,8 +39,15 @@ class DBQueriesProfiler implements ICustomProfiler
 
     }
 
+
+    private function flushLogs()
+    {
+        $this->logs = [];
+    }
+
     public function run(): array
     {
+        $this->flushLogs();
         foreach ($this->connections as $connectionName => $connection) {
             $logs = $connection->getQueryLog();
             if (!empty($logs)) {
