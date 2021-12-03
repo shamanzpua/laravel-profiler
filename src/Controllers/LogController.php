@@ -13,11 +13,11 @@ class LogController extends Controller
 {
     public function show(Request $request, ILogProvider $logsProvider)
     {
-        if ($request->get('code_auth') !== 'xmw1l9lkmqkldql1kw400dqkw73dqDq2dqqd11') {
-            throw new NotFoundHttpException();
-        }
-//
-//        $logFiles = $logsProvider->get();
         return view('profiler-logs', ['logFiles' => $logsProvider->get()]);
+    }
+
+    public function delete()
+    {
+
     }
 }

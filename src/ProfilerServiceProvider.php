@@ -13,6 +13,7 @@ use shamanzpua\Profiler\LogStorages\FileStorage;
 use shamanzpua\Profiler\Profiler;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
+use shamanzpua\LaravelProfiler\Middleware\AuthCodeMiddleware;
 
 class ProfilerServiceProvider extends ServiceProvider
 {
@@ -35,6 +36,8 @@ class ProfilerServiceProvider extends ServiceProvider
      */
     protected function addRoutes()
     {
+        $this->app['router']->aliasMiddleware(AuthCodeMiddleware::NAME, AuthCodeMiddleware::class);
+
         Route::group(['namespace' => 'shamanzpua\LaravelProfiler\Controllers'], function ($router) {
             require  __DIR__ . '/configs/routes.php';
         });
