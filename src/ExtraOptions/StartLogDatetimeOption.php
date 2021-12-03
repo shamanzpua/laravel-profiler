@@ -17,6 +17,6 @@ class StartLogDatetimeOption implements IExtraOption
         if ($timezone) {
             $logDate->timezone($timezone);
         }
-        return $logDate->toDateTimeString() . "   ". $logDate->getTimezone();
+        return $logDate->toDateTimeString();
     }
 }
