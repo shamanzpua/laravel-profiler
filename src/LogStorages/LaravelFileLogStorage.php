@@ -17,6 +17,8 @@ class LaravelFileLogStorage implements ILogStorage, ILogProvider, ILogCleaner
         '..',
     ];
 
+    private $targetLog;
+
     /**
      * @var FileStorage $fileStorage
      */
@@ -54,6 +56,9 @@ class LaravelFileLogStorage implements ILogStorage, ILogProvider, ILogCleaner
 
     public function get($options = null)
     {
+        if (isset($options['log_name'])) {
+            $this->targetLog = $options['log_name'];
+        }
         $ensureLogsAction = function ($fileFullPath, $file) use ($options) {
             $logFile[$file] = unserialize(file_get_contents($fileFullPath));
             $logFile[$file]['datetime'] = $this->extraOptionFactory
@@ -71,6 +76,7 @@ class LaravelFileLogStorage implements ILogStorage, ILogProvider, ILogCleaner
         return collect($this->logFiles)->sortByDesc('start_time');
     }
 
+
     /**
      * recircive
      */
@@ -81,6 +87,10 @@ class LaravelFileLogStorage implements ILogStorage, ILogProvider, ILogCleaner
             $fileFullPath =  $path. "/" . $file;
 
             if (in_array($file, static::SYSTEM_DIRS)) {
+                continue;
+            }
+
+            if ($this->targetLog && (strpos($file, $this->targetLog) === false)) {
                 continue;
             }
 

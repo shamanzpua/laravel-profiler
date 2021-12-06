@@ -15,7 +15,7 @@ class LogController extends Controller
 {
     public function show(Request $request, ILogProvider $logsProvider)
     {
-        return view('profiler-logs', ['logFiles' => $logsProvider->get()]);
+        return view('profiler-logs', ['logFiles' => $logsProvider->get(['log_name' => $request->get('log_name')])]);
     }
 
     public function delete(DeleteLogsRequest $request, ILogCleaner $ILogCleaner)
