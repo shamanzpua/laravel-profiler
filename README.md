@@ -22,9 +22,17 @@ Usage
  performance_profiling_stop("LAST_BREAK_POINT_NAME");
 ```
 
-Logs url:
+Get logs url:
 
 http://{PROJECT_URL}/show-profiler-logs?code_auth={PROFILER_AUTH_CODE}
+
+optional query param: &log_name=SOME_LOG_NAME
+
+
+Clean old logs url:
+
+http://{PROJECT_URL}/delete-profiler-logs?code_auth={PROFILER_AUTH_CODE}&delete_after_minutes=30
+
 
 .env configs
 
