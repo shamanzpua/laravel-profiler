@@ -5,6 +5,7 @@ use shamanzpua\LaravelProfiler\Contracts\IExtraOptionFactory;
 use shamanzpua\LaravelProfiler\Contracts\ILogCleaner;
 use shamanzpua\LaravelProfiler\Contracts\ILogProvider;
 use shamanzpua\LaravelProfiler\Exceptions\InvalidConfigException;
+use shamanzpua\LaravelProfiler\Exceptions\InvalidParamException;
 use shamanzpua\Profiler\LogStorages\FileStorage;
 use shamanzpua\Profiler\Contracts\ILogStorage;
 use Closure;
@@ -15,6 +16,8 @@ class LaravelFileLogStorage implements ILogStorage, ILogProvider, ILogCleaner
         '.',
         '..',
     ];
+
+    private $targetLog;
 
     /**
      * @var FileStorage $fileStorage
@@ -53,6 +56,9 @@ class LaravelFileLogStorage implements ILogStorage, ILogProvider, ILogCleaner
 
     public function get($options = null)
     {
+        if (isset($options['log_name'])) {
+            $this->targetLog = $options['log_name'];
+        }
         $ensureLogsAction = function ($fileFullPath, $file) use ($options) {
             $logFile[$file] = unserialize(file_get_contents($fileFullPath));
             $logFile[$file]['datetime'] = $this->extraOptionFactory
@@ -70,6 +76,7 @@ class LaravelFileLogStorage implements ILogStorage, ILogProvider, ILogCleaner
         return collect($this->logFiles)->sortByDesc('start_time');
     }
 
+
     /**
      * recircive
      */
@@ -80,6 +87,10 @@ class LaravelFileLogStorage implements ILogStorage, ILogProvider, ILogCleaner
             $fileFullPath =  $path. "/" . $file;
 
             if (in_array($file, static::SYSTEM_DIRS)) {
+                continue;
+            }
+
+            if ($this->targetLog && (strpos($file, $this->targetLog) === false)) {
                 continue;
             }
 
@@ -95,6 +106,18 @@ class LaravelFileLogStorage implements ILogStorage, ILogProvider, ILogCleaner
 
     public function delete($options = null)
     {
+        $deleteLogsAction = function ($fileFullPath, $file) use ($options) {
+            if (!isset($options['delete_after_minutes'])) {
+                throw new InvalidParamException("'delete_after_minutes' should be set");
+            }
 
+            $minutes = $options['delete_after_minutes'];
+            $log = unserialize(file_get_contents($fileFullPath));
+            if ($log['start_time'] < (time() - $minutes * 60)) {
+                unlink($fileFullPath);
+            }
+        };
+
+        $this->scanDir($this->logsPath, $deleteLogsAction);
     }
 }
