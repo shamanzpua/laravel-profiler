@@ -5,6 +5,7 @@ use shamanzpua\LaravelProfiler\Contracts\IExtraOptionFactory;
 use shamanzpua\LaravelProfiler\Contracts\ILogCleaner;
 use shamanzpua\LaravelProfiler\Contracts\ILogProvider;
 use shamanzpua\LaravelProfiler\Exceptions\InvalidConfigException;
+use shamanzpua\LaravelProfiler\Exceptions\InvalidParamException;
 use shamanzpua\Profiler\LogStorages\FileStorage;
 use shamanzpua\Profiler\Contracts\ILogStorage;
 use Closure;
@@ -95,6 +96,18 @@ class LaravelFileLogStorage implements ILogStorage, ILogProvider, ILogCleaner
 
     public function delete($options = null)
     {
+        $deleteLogsAction = function ($fileFullPath, $file) use ($options) {
+            if (!isset($options['delete_after_minutes'])) {
+                throw new InvalidParamException("'delete_after_minutes' should be set");
+            }
 
+            $minutes = $options['delete_after_minutes'];
+            $log = unserialize(file_get_contents($fileFullPath));
+            if ($log['start_time'] < (time() - $minutes * 60)) {
+                unlink($fileFullPath);
+            }
+        };
+
+        $this->scanDir($this->logsPath, $deleteLogsAction);
     }
 }
