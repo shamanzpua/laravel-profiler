@@ -78,7 +78,8 @@ class ProfilerServiceProvider extends ServiceProvider
         $this->bindStorageClasses();
 
         Profiler::getInstance()
-            ->setLogStorage(app(ILogStorage::class));
+            ->setLogStorage(app(ILogStorage::class))
+            ->setLogDurationThreshold(config("code-profiler.log_duration_threshold"));
 
         $this->setupCustomProfilers();
     }

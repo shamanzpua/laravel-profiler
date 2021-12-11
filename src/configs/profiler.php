@@ -5,6 +5,7 @@ return [
     'auth_code' => env('PROFILER_AUTH_CODE', null),
     'db_connections' => env('PROFILER_QUERY_LOG_DBS'),
     'timezone' => env('PROFILER_LOCAL_TIMEZONE'),
+    'log_duration_threshold' => env('LOG_DURATION_THRESHOLD', 0),
     'durations' => [
         'database_critical' => env('PROFILER_DB_CRITICAL_DURATION', 500),
         'database_warning' => env('PROFILER_DB_WARNING_DURATION', 100),

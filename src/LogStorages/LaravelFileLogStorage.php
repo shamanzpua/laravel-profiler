@@ -1,6 +1,7 @@
 <?php
 namespace shamanzpua\LaravelProfiler\LogStorages;
 
+use Illuminate\Support\Facades\Cache;
 use shamanzpua\LaravelProfiler\Contracts\IExtraOptionFactory;
 use shamanzpua\LaravelProfiler\Contracts\ILogCleaner;
 use shamanzpua\LaravelProfiler\Contracts\ILogProvider;
@@ -60,13 +61,16 @@ class LaravelFileLogStorage implements ILogStorage, ILogProvider, ILogCleaner
             $this->targetLog = $options['log_name'];
         }
         $ensureLogsAction = function ($fileFullPath, $file) use ($options) {
-            $logFile[$file] = unserialize(file_get_contents($fileFullPath));
-            $logFile[$file]['datetime'] = $this->extraOptionFactory
-                ->create('start-log-datetime')
-                ->get($logFile[$file]['start_time']);
-            $logFile[$file]['duplicateQueries'] = $this->extraOptionFactory
-                ->create('db-queries')
-                ->get($logFile[$file]['stacktrace']);
+            $logFile = Cache::rememberForever($fileFullPath, function () use ($file, $fileFullPath)  {
+                $logFile[$file] = unserialize(file_get_contents($fileFullPath));
+                $logFile[$file]['datetime'] = $this->extraOptionFactory
+                    ->create('start-log-datetime')
+                    ->get($logFile[$file]['start_time']);
+                $logFile[$file]['duplicateQueries'] = $this->extraOptionFactory
+                    ->create('db-queries')
+                    ->get($logFile[$file]['stacktrace']);
+                return $logFile;
+            });
 
             $this->logFiles = array_merge($this->logFiles, $logFile);
         };
