@@ -14,7 +14,7 @@ class Factory implements IExtraOptionFactory
     protected function getClassMap() : array
     {
         return [
-            'db-queries' => DBQueriesDuplicateOption::class,
+            'db-queries' => DBQueriesOption::class,
             'start-log-datetime' => StartLogDatetimeOption::class,
         ];
     }

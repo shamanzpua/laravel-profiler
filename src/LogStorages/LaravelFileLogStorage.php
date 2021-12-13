@@ -66,9 +66,9 @@ class LaravelFileLogStorage implements ILogStorage, ILogProvider, ILogCleaner
                 $logFile[$file]['datetime'] = $this->extraOptionFactory
                     ->create('start-log-datetime')
                     ->get($logFile[$file]['start_time']);
-                $logFile[$file]['duplicateQueries'] = $this->extraOptionFactory
+                $logFile[$file] = $this->extraOptionFactory
                     ->create('db-queries')
-                    ->get($logFile[$file]['stacktrace']);
+                    ->get($logFile[$file]);
                 return $logFile;
             });
 
