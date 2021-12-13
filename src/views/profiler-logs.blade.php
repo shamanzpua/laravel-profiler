@@ -83,7 +83,7 @@
                 </div>
                 <div class='inline-div duration' ><b>Duration:</b>{{$pointData['duration']}} ms </div>
                  @if(!empty($pointData['db']))
-                     <a class="btn btn-danger" data-toggle="collapse" href="#db-{{md5($name . $pointKey)}}">DB Queries</a>
+                     <a class="btn btn-danger" title="Total Duration: {{$pointData['db_duration_sum']['total']}}ms" data-toggle="collapse" href="#db-{{md5($name . $pointKey)}}">DB Queries</a>
                  @endif
              </span>
 

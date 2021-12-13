@@ -58,7 +58,7 @@ class DBQueriesProfiler implements ICustomProfiler
 
         return [
             'db' => $this->logs,
-            'badConnections' => $this->badConnections,
+            'bad_connections' => $this->badConnections,
         ];
     }
 }
